@@ -1,0 +1,16 @@
+import pandas as pd
+from yahoo_fin.stock_info import get_balance_sheet
+
+stock_list = ["AAPL", "IBM", "AMZN"]
+
+all_data = {ticker: get_balance_sheet(ticker)
+                 for ticker in stock_list}
+
+aapl = pd.DataFrame(all_data['AAPL'])
+aapl = aapl.set_index('Period Ending')
+
+aapl_t = aapl.transpose()
+aapl_t = aapl_t[['Total Current Assets', 'Total Current Liabilities']].astype(float)
+
+aapl_t['Current Ratio'] = aapl_t['Total Current Assets'] / aapl_t['Total Current Liabilities']
+aapl_t['Current Ratio']
